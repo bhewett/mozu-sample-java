@@ -5,7 +5,7 @@ apply plugin: 'war'
 apply plugin: 'jetty'
 
 
-sourceCompatibility = 1.6
+sourceCompatibility = 1.7
 
 archivesBaseName='MozuSample'
 version = '1.1.1'
@@ -22,9 +22,8 @@ task wrapper(type: Wrapper) {
 }
 
 repositories {
-    maven {
-          url "http://aus02bpnexs001.corp.volusion.com:8080/nexus/content/groups/public"
-    }
+	mavenCentral()
+	mavenLocal()
 }
 
 configurations.all {
@@ -72,12 +71,3 @@ test {
     systemProperties 'property': 'value'
 }
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: "http://aus02bpnexs001.corp.volusion.com:8080/nexus/content/repositories/releases/") {
-                authentication(userName: "deployment", password: "deployment123")
-             }
-       }
-    }
-}

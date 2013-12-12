@@ -37,9 +37,9 @@ import com.mozu.api.sample.model.MozuAuthorization;
 import com.mozu.api.sample.model.SiteSelector;
 import com.mozu.api.security.AppAuthenticator;
 import com.mozu.api.security.AuthenticationProfile;
+import com.mozu.api.security.AuthenticationScope;
 import com.mozu.api.security.Scope;
 import com.mozu.api.security.UserAuthenticator;
-import com.mozu.api.security.UserScope;
 /**
  * Handles requests for the application home page.
  */
@@ -103,7 +103,7 @@ public class MozuController {
         userAuth.setPassword(authorization.getPassword());
         try {
             // Authorize user
-            AuthenticationProfile authProfile = UserAuthenticator.authenticate(userAuth, UserScope.Tenant);
+            AuthenticationProfile authProfile = UserAuthenticator.authenticate(userAuth, AuthenticationScope.Tenant);
             // get list of tenants a user has access to 
             List<Scope> tenants = authProfile.getAuthorizedScopes();
             List<Site> sites = null;
@@ -203,7 +203,7 @@ public class MozuController {
         ProductResource prodResource = new ProductResource (apiContext);
 
         try {
-            ProductCollection prodCollection = prodResource.getProducts(DataViewMode.Live, null, false, 100, null, null, null, 0, userAuthentication.getAuthTicket());
+            ProductCollection prodCollection = prodResource.getProducts(DataViewMode.Live, 0, 100, null, null, null, null, false, userAuthentication.getAuthTicket());
             modelMap.addAttribute("products", prodCollection.getItems());
             
             return "products";
@@ -245,8 +245,10 @@ public class MozuController {
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout (Locale locale, ModelMap modelMap, Model model) { 
-        modelMap.remove("tenantAuthorization");
+        AuthenticationProfile userAuthentication = (AuthenticationProfile)modelMap.get("tenantAuthorization");
+        UserAuthenticator.logout(userAuthentication.getAuthTicket());
         AppAuthenticator.invalidateAuth();
+        modelMap.remove("tenantAuthorization");
         return home(locale, model);
     }
 

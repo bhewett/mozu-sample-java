@@ -7,7 +7,7 @@ apply plugin: 'jetty'
 sourceCompatibility = 1.6
 
 archivesBaseName='MozuSample'
-version = '1.2.1'
+version = '1.2.4'
 group='wars'
 httpPort = 8001 
 
@@ -22,8 +22,8 @@ task wrapper(type: Wrapper) {
 }
 
 repositories {
-	mavenCentral()
-	mavenLocal()
+    mavenCentral()
+    mavenLocal()
 }
 
 configurations.all {
@@ -49,7 +49,7 @@ dependencies {
 
 	compile ("javax.servlet:servlet-api:2.5") 
 
-    compile ("com.mozu.api:mozu-api:1.2.2") {
+    compile ("com.mozu.api:mozu-api:1.2.4") {
     	exclude group: 'mysql'
     	exclude group: 'xerces'
     	exclude group: 'berkeleydb'
